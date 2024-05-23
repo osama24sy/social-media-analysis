@@ -9,6 +9,17 @@ from topic_classifier import topic_classify
 from opinion_classifier import opinion_classify
 from summarizer import summarize
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("grpc_server.log"),
+        logging.StreamHandler()
+    ]
+)
+
+logger = logging.getLogger(__name__)
+
 class CommentAnalysisServicer(comment_analysis_pb2_grpc.CommentAnalysisServicer):
     def AnalyzeComment(self, request, context):
         text = request.text
