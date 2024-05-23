@@ -2,44 +2,56 @@ from concurrent import futures
 import grpc
 import comment_analysis_pb2
 import comment_analysis_pb2_grpc
+import sys
+import logging
 
-from preprocessor import preprocess_text
-from classifier import classify_text
-from summarizer import summarize_text
+from topic_classifier import topic_classify
+from opinion_classifier import opinion_classify
+from summarizer import summarize
 
 class CommentAnalysisServicer(comment_analysis_pb2_grpc.CommentAnalysisServicer):
     def AnalyzeComment(self, request, context):
         text = request.text
         comment_id = request.comment_id
+        
+        try:
+            print(f"Comment: '{text}' was received.")
 
-        # Preprocess text
-        preprocessed_text = preprocess_text(text)
+            topic_id, topic_score = topic_classify(text)
+            print(f"THE TOPIC ID IS: {topic_id} - {topic_score}")
 
-        # Classify text
-        claim_label, claim_score = classify_text(preprocessed_text)
-        evidence_label, evidence_score = classify_text(preprocessed_text)
-        counterclaim_label, counterclaim_score = classify_text(preprocessed_text)
-        rebuttal_label, rebuttal_score = classify_text(preprocessed_text)
+            predicted_class = opinion_classify(text)
+            print(f"THE OPINION CLASS IS: {predicted_class}")
+            # conclusion = summarize(topic_id)
+            
+            
+            return comment_analysis_pb2.CommentResponse(
+                comment_id=comment_id,
+                topic_id=topic_id,
+                opinion_class=predicted_class,
+                conclusion='conclusion'
+            )
+        except Exception as e:
+            logging.error(f"Error processing comment {comment_id}: {str(e)}")
+            context.set_details(f"Internal error: {str(e)}")
+            context.set_code(grpc.StatusCode.INTERNAL)
+            return comment_analysis_pb2.CommentResponse(
+                comment_id=comment_id,
+                topic_id=-1,
+                opinion_class="Unknown",
+                conclusion="Unknown"
+            )
 
-        # Summarize text
-        conclusion = summarize_text(claim_label, evidence_label, counterclaim_label, rebuttal_label)
-
-        return comment_analysis_pb2.AnalyzeCommentResponse(
-            comment_id=comment_id,
-            topic='Mars Face',
-            claim=claim_label,
-            evidence=evidence_label,
-            counterclaim=counterclaim_label,
-            rebuttal=rebuttal_label,
-            conclusion=conclusion,
-        )
-    
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     comment_analysis_pb2_grpc.add_CommentAnalysisServicer_to_server(CommentAnalysisServicer(), server)
     server.add_insecure_port('[::]:50051')
     server.start()
-    server.wait_for_termination()
+    try:
+        server.wait_for_termination()
+    except KeyboardInterrupt:
+        server.stop(0)
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
     serve()

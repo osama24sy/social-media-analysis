@@ -11,10 +11,7 @@ message CommentRequest {
 
 message CommentResponse {
     int32 comment_id = 1;
-    string topic = 2;
-    string claim = 3;
-    string evidence = 4;
-    string counterclaim = 5;
-    string rebuttal = 6;
-    string conclusion = 7;
+    string topic_id = 2;
+    string opinion_class = 3;
+    string conclusion = 4;
 }

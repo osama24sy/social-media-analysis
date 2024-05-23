@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x16\x63omment_analysis.proto\"2\n\x0e\x43ommentRequest\x12\x12\n\ncomment_id\x18\x01 \x01(\x05\x12\x0c\n\x04text\x18\x02 \x01(\t\"\x91\x01\n\x0f\x43ommentResponse\x12\x12\n\ncomment_id\x18\x01 \x01(\x05\x12\r\n\x05topic\x18\x02 \x01(\t\x12\r\n\x05\x63laim\x18\x03 \x01(\t\x12\x10\n\x08\x65vidence\x18\x04 \x01(\t\x12\x14\n\x0c\x63ounterclaim\x18\x05 \x01(\t\x12\x10\n\x08rebuttal\x18\x06 \x01(\t\x12\x12\n\nconclusion\x18\x07 \x01(\t2F\n\x0f\x43ommentAnalysis\x12\x33\n\x0e\x41nalyzeComment\x12\x0f.CommentRequest\x1a\x10.CommentResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x16\x63omment_analysis.proto\"2\n\x0e\x43ommentRequest\x12\x12\n\ncomment_id\x18\x01 \x01(\x05\x12\x0c\n\x04text\x18\x02 \x01(\t\"b\n\x0f\x43ommentResponse\x12\x12\n\ncomment_id\x18\x01 \x01(\x05\x12\x10\n\x08topic_id\x18\x02 \x01(\t\x12\x15\n\ropinion_class\x18\x03 \x01(\t\x12\x12\n\nconclusion\x18\x04 \x01(\t2F\n\x0f\x43ommentAnalysis\x12\x33\n\x0e\x41nalyzeComment\x12\x0f.CommentRequest\x1a\x10.CommentResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -23,8 +23,8 @@ if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_COMMENTREQUEST']._serialized_start=26
   _globals['_COMMENTREQUEST']._serialized_end=76
-  _globals['_COMMENTRESPONSE']._serialized_start=79
-  _globals['_COMMENTRESPONSE']._serialized_end=224
-  _globals['_COMMENTANALYSIS']._serialized_start=226
-  _globals['_COMMENTANALYSIS']._serialized_end=296
+  _globals['_COMMENTRESPONSE']._serialized_start=78
+  _globals['_COMMENTRESPONSE']._serialized_end=176
+  _globals['_COMMENTANALYSIS']._serialized_start=178
+  _globals['_COMMENTANALYSIS']._serialized_end=248
 # @@protoc_insertion_point(module_scope)
