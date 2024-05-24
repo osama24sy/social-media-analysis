@@ -19,6 +19,16 @@ def process_comment(comment):
         print(f"Claim: {response.opinion_class}")
         print(f"Conclusion: {response.conclusion}")
         
+        conn = psycopg2.connect(dbname="digitalpulse", user="osama24sy", password="test123", host="localhost")
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO opinions (topic_id, text, type) VALUES (%s, %s, %s, %s)",
+                       (response.topic_id, comment['text'], response.opinion_class))
+        cursor.execute("INSERT INTO conclusions (topic_id, text) VALUES (%s, %s)",
+                       (response.topic_id, response.conclusion))
+        conn.commit()
+        cursor.close()
+        conn.close()
+    
 
 for message in consumer:
     comment = message.value

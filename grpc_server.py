@@ -8,6 +8,7 @@ import logging
 from topic_classifier import topic_classify
 from opinion_classifier import opinion_classify
 from summarizer import summarize
+from preprocessor import preprocess_text
 
 logging.basicConfig(
     level=logging.INFO,
@@ -28,19 +29,23 @@ class CommentAnalysisServicer(comment_analysis_pb2_grpc.CommentAnalysisServicer)
         try:
             print(f"Comment: '{text}' was received.")
 
+            text = preprocess_text(text)
+
             topic_id, topic_score = topic_classify(text)
             print(f"THE TOPIC ID IS: {topic_id} - {topic_score}")
 
             predicted_class = opinion_classify(text)
             print(f"THE OPINION CLASS IS: {predicted_class}")
-            # conclusion = summarize(topic_id)
+            
+            conclusion = summarize(topic_id, text, predicted_class)
+            print(f"THE CONCLUSION IS: {conclusion}")
             
             
             return comment_analysis_pb2.CommentResponse(
                 comment_id=comment_id,
                 topic_id=topic_id,
                 opinion_class=predicted_class,
-                conclusion='conclusion'
+                conclusion=conclusion
             )
         except Exception as e:
             logging.error(f"Error processing comment {comment_id}: {str(e)}")

@@ -1,3 +1,5 @@
 env
 __pycache__
-data
+data/bert_model
+data/classifier.py
+data/bert_clf_ft
